@@ -1,41 +1,47 @@
 const prisma = require('../db/prisma')
 const validator = require('../validators/todoValidator')
+const getTodo = async (req, res) => {
+    const  status  = req.body.status;
+    const where = {
+      isDeleted: 0,
+      user : {
+        userId : req.user.userId,
+        userDeleted : 0
+      },
 
-const getTodo = async(req, res) => {
 
-    try {
-    
-        const results = await prisma.todo.findMany({
-            where : {
-                isDeleted : 0,
-                user : {
-                    userId : req.user.userId,
-                    userDeleted : 0
-                }
-            }
-        })
-
-        if (results.length > 0)
-        {
-           return  res.json({
-                data : results,
-                status : 200
-            })   
-        }
-        else 
-        {
-           return  res.json({
-                messsage : "No data available"
-            })
-        }
-    } catch (error) {
-        console.log(error)
-       return res.status(500).json({
-            messsage : "Internal server error"
-        })        
+    };
+  
+    if (status !== null && (status <= 2&& status >=0 )) {
+      where.todoStatus = parseInt(status);
     }
-}
-
+  
+    try {
+      const results = await prisma.todo.findMany({
+        where,
+        orderBy :{
+            createdAt : 'desc'
+        }
+      });
+  
+      if (results.length > 0) {
+        return res.json({
+          data: results,
+          status: 200,
+        });
+      } else {
+        return res.json({
+          message: "No data available",
+        });
+      }
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({
+        message: "Internal server error",
+      });
+    }
+  };
+  
 const createTodo = async(req, res) => {
 
     const todoDesc = req.body.todo
