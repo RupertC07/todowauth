@@ -1,0 +1,11 @@
+-- CreateTable
+CREATE TABLE "Todo" (
+    "todoId" SERIAL NOT NULL,
+    "todoDesc" TEXT NOT NULL,
+    "todoStatus" INTEGER NOT NULL DEFAULT 0,
+    "isDeletd" INTEGER NOT NULL DEFAULT 0,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "Todo_pkey" PRIMARY KEY ("todoId")
+);
