@@ -5,7 +5,7 @@ const dotenv = require('dotenv')
 dotenv.config()
 
 
-const port = process.env.PORT;
+const port = process.env.PORT || 6969;
 
 const app = express()
 
@@ -17,6 +17,7 @@ app.use(cors())
 app.listen(port , () => console.log(`Port is at : ${port}`))
 
 const todoRoutes = require('./Routers/todoRoutes')
+const userRoutes = require('./Routers/userRoutes')
 
 app.use('/api/v2/todo' , todoRoutes)
-
+app.use('/api/v2/user' , userRoutes)

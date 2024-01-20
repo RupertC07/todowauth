@@ -7,7 +7,11 @@ const getTodo = async(req, res) => {
     
         const results = await prisma.todo.findMany({
             where : {
-                isDeleted : 0
+                isDeleted : 0,
+                user : {
+                    userId : req.user.userId,
+                    userDeleted : 0
+                }
             }
         })
 
@@ -43,7 +47,8 @@ const createTodo = async(req, res) => {
 
         const results = await prisma.todo.create({
             data : {
-                todoDesc : todoDesc
+                todoDesc : todoDesc,
+                userId : req.user.userId
             }
         })
 
@@ -79,7 +84,11 @@ const updateTodo  = async (req, res) => {
         const task = await prisma.todo.findUnique({
             where : {
                 isDeleted : 0,
-                todoId : parseInt(id)
+                todoId : parseInt(id),
+                user : {
+                    userId : parseInt(req.user.userId),
+                    userDeleted : 0
+                }
 
             }
         })
@@ -90,7 +99,8 @@ const updateTodo  = async (req, res) => {
             const results = await prisma.todo.update({
                 where:{
                     isDeleted : 0,
-                    todoId : parseInt(id)
+                    todoId : parseInt(id),
+                   
                 },
                 data : {
 
@@ -135,8 +145,12 @@ const removeTodo  = async (req, res) => {
         const task = await prisma.todo.findUnique({
             where : {
                 isDeleted : 0,
-                todoId : parseInt(id)
-
+                todoId : parseInt(id),
+                user : {
+                    userId : parseInt(req.user.userId),
+                    userDeleted : 0
+                }
+                
             }
         })
 
@@ -200,7 +214,7 @@ const updateTodoStatus  = async (req, res) => {
         const task = await prisma.todo.findUnique({
             where : {
                 isDeleted : 0,
-                todoId : parseInt(id)
+                todoId : parseInt(id),
 
             }
         })
